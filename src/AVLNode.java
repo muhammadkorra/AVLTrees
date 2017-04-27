@@ -8,6 +8,9 @@ public class AVLNode{
     int height;
     private static final int ALLOWED_IMBALANCE = 1;
 
+    public AVLNode (){
+
+    }
 
     public AVLNode (String element){
         this.element = element;
@@ -24,7 +27,7 @@ public class AVLNode{
         return node == null? -1 : node.height;
     }
 
-    private AVLNode insert (String element, AVLNode node){
+    public AVLNode insert (String element, AVLNode node){
         if (node == null)
             return new AVLNode(element);
 

@@ -1,6 +1,9 @@
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        AVLTree avlTree = new AVLTree();
+
+        avlTree.loadTree();
+
     }
 }
