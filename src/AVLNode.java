@@ -8,8 +8,8 @@ public class AVLNode{
     int height;
     private static final int ALLOWED_IMBALANCE = 1;
 
-    public AVLNode (){
 
+    public AVLNode() {
     }
 
     public AVLNode (String element){
@@ -23,6 +23,7 @@ public class AVLNode{
         this.height = 0;
     }
 
+
     private int height (AVLNode node){
         return node == null? -1 : node.height;
     }
@@ -34,9 +35,9 @@ public class AVLNode{
         int compareResult = element.compareTo(node.element);
 
         if (compareResult < 0)
-            node.leftChild = insert(element, node);
+            node.leftChild = insert(element, node.leftChild);
         else if (compareResult > 0)
-            node.rightChild = insert(element, node);
+            node.rightChild = insert(element, node.rightChild);
 
         return balance(node);
     }
@@ -102,7 +103,7 @@ public class AVLNode{
         return node;
     }
 
-    private AVLNode remove( String element, AVLNode node )
+    public AVLNode remove( String element, AVLNode node )
     {
         if( node == null )
             return node; // Item not found; do nothing
