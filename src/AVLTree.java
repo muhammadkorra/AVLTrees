@@ -6,7 +6,7 @@ import java.util.List;
  */
 public class AVLTree extends AVLNode{
 
-    AVLNode root;
+    private AVLNode root;
 
     public AVLTree (AVLNode root){
         this.root=root;
@@ -16,7 +16,37 @@ public class AVLTree extends AVLNode{
         insert("Ashraf");
         insert("Ahmed");
         insert("7amada");
+        insert("Ashraf");
     }
+
+    public void searchElement(String element){
+        if (search (root,element))
+            System.out.println("Element found");
+        else
+            System.out.println("Element was not found");
+    }
+
+    private boolean search(AVLNode r, String val)
+    {
+        boolean found = false;
+        while ((r != null) && !found)
+        {
+            String rval = r.element;
+            if (val.compareTo(rval) < 0)
+                r = r.leftChild;
+            else if (val.compareTo(rval) > 0)
+                r = r.rightChild;
+            else
+            {
+                found = true;
+                break;
+            }
+            found = search(r, val);
+        }
+        return found;
+    }
+
+
     public boolean insert (String x){
         try {
             root = insert (x, root);
