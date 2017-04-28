@@ -47,7 +47,7 @@ public class AVLNode{
             return node;
 
         if (height(node.leftChild) - height(node.rightChild) > ALLOWED_IMBALANCE)
-            if (height(node.leftChild.leftChild) >= height(node.rightChild.leftChild))
+            if (height(node.leftChild.leftChild) >= height(node.leftChild.rightChild))
                 node = rotateWithLeftChild(node);
             else
                 node = doubleWithLeftChild(node);
@@ -57,8 +57,8 @@ public class AVLNode{
             else
                 node = doubleWithRightChild(node);
 
-            node.height = Math.max(height(node.leftChild),height(node.rightChild)) + 1;
-            return node;
+        node.height = Math.max(height(node.leftChild),height(node.rightChild)) + 1;
+        return node;
     }
 
     private AVLNode rotateWithLeftChild( AVLNode k2) {
@@ -103,32 +103,101 @@ public class AVLNode{
         return node;
     }
 
-    public AVLNode remove( String element, AVLNode node )
-    {
-        if( node == null )
-            return node; // Item not found; do nothing
+//    public AVLNode remove( String element, AVLNode node )
+//    {
+//        if( node == null )
+//            return node; // Item not found; do nothing
+//
+//        int compareResult = element.compareTo(node.element);
+//
+//        if( compareResult < 0 )
+//            node.leftChild = remove(element, node.leftChild);
+//
+//        else if( compareResult > 0 )
+//            node.rightChild = remove(element, node.rightChild);
+//
+//        else if(node.leftChild != null && node.rightChild != null) // Two children
+//        {
+//            node.element = findMin(node.rightChild).element;
+//            node.rightChild = remove(node.element, node.rightChild);
+//        }
+//        else
+//            node = (node.leftChild != null) ? node.leftChild : node.rightChild;
+//
+//        return balance(node);
+//    }
 
-        int compareResult = element.compareTo(node.element);
-
-        if( compareResult < 0 )
-            node.leftChild = remove(element, node.leftChild);
-
-        else if( compareResult > 0 )
-            node.rightChild = remove(element, node.rightChild);
-
-        else if(node.leftChild != null && node.rightChild != null) // Two children
-        {
-            node.element = findMin(node.rightChild).element;
-            node.rightChild = remove(node.element, node.rightChild);
+    public AVLNode remove(String x, AVLNode t)throws NullPointerException {
+        if (t==null)    {
+//            System.out.println("Sorry but you're mistaken, " + t + " doesn't exist in this tree :)\n");
+            throw new NullPointerException();
         }
+//        System.out.println("Remove starts... " + t.element + " and " + x);
+
+        if (x.compareTo(t.element) < 0 ) {
+            t.leftChild = remove(x,t.leftChild);
+            int l = t.leftChild != null ? t.leftChild.height : 0;
+
+            if((t.rightChild != null) && (t.rightChild.height - l >= 2)) {
+                int rightHeight = t.rightChild.rightChild != null ? t.rightChild.rightChild.height : 0;
+                int leftHeight = t.rightChild.leftChild != null ? t.rightChild.leftChild.height : 0;
+
+                if(rightHeight >= leftHeight)
+                    t = rotateWithLeftChild(t);
+                else
+                    t = doubleWithRightChild(t);
+            }
+        }
+        else if (x.compareTo(t.element) > 0) {
+            t.rightChild = remove(x,t.rightChild);
+            int r = t.rightChild != null ? t.rightChild.height : 0;
+            if((t.leftChild != null) && (t.leftChild.height - r >= 2)) {
+                int leftHeight = t.leftChild.leftChild != null ? t.leftChild.leftChild.height : 0;
+                int rightHeight = t.leftChild.rightChild != null ? t.leftChild.rightChild.height : 0;
+                if(leftHeight >= rightHeight)
+                    t = rotateWithRightChild(t);
+                else
+                    t = doubleWithLeftChild(t);
+            }
+        }
+      /*
+         Here, we have ended up when we are node which shall be removed.
+         Check if there is a left-hand node, if so pick out the largest element out, and move down to the root.
+       */
+        else if(t.leftChild != null) {
+            t.element = findMax(t.leftChild).element;
+            remove(t.element, t.leftChild);
+
+            if((t.rightChild != null) && (t.rightChild.height - t.leftChild.height >= 2)) {
+                int rightHeight = t.rightChild.rightChild != null ? t.rightChild.rightChild.height : 0;
+                int leftHeight = t.rightChild.leftChild != null ? t.rightChild.leftChild.height : 0;
+
+                if(rightHeight >= leftHeight)
+                    t = rotateWithLeftChild(t);
+                else
+                    t = doubleWithRightChild(t);
+            }
+        }
+
         else
-            node = (node.leftChild != null) ? node.leftChild : node.rightChild;
+            t = (t.leftChild != null) ? t.leftChild : t.rightChild;
 
-        return balance(node);
+        if(t != null) {
+            int leftHeight = t.leftChild != null ? t.leftChild.height : 0;
+            int rightHeight = t.rightChild!= null ? t.rightChild.height : 0;
+            t.height = Math.max(leftHeight,rightHeight) + 1;
+        }
+        return t;
+    } //End of remove...
+
+    private AVLNode findMax( AVLNode t )
+    {
+        if( t == null )
+            return t;
+
+        while( t.rightChild!= null )
+            t = t.rightChild;
+        return t;
     }
-
-
-
-
 
 }

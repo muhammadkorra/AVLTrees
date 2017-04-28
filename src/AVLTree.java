@@ -19,11 +19,16 @@ public class AVLTree extends AVLNode{
         insert("Ashraf");
     }
 
-    public void searchElement(String element){
-        if (search (root,element))
-            System.out.println("Element found");
+    public boolean searchElement(String element){
+        if (search (root,element)) {
+//            System.out.println("Element found");
+            return true;
+        }
         else
-            System.out.println("Element was not found");
+        {
+//            System.out.println("Element was not found");
+            return false;
+        }
     }
 
     private boolean search(AVLNode r, String val)
@@ -50,14 +55,20 @@ public class AVLTree extends AVLNode{
     public boolean insert (String x){
         try {
             root = insert (x, root);
-
             return true;
         } catch(Exception e){
             return false;
         }
     }
 
-    public void remove( String x ) {
-        root = remove(x, root);
+    public boolean remove( String x ) {
+        try {
+            root = remove(x, root);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 }
